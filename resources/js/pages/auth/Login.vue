@@ -10,7 +10,9 @@ import AuthBase from '@/layouts/AuthLayout.vue'
 import { register } from '@/routes'
 import { store } from '@/routes/login'
 import { request } from '@/routes/password'
-import { Form, Head } from '@inertiajs/vue3'
+import { Form, Head, usePage } from '@inertiajs/vue3'
+
+const page = usePage()
 
 defineProps<{
   status?: string
@@ -39,6 +41,11 @@ defineProps<{
       v-bind="store.form()"
       :reset-on-success="['password']"
       v-slot="{ errors, processing }"
+      @finish="() => {
+        if (page.props.auth?.user) {
+          $inertia.visit('/user')
+        }
+      }"
       class="space-y-6"
     >
       <!-- EMAIL -->
