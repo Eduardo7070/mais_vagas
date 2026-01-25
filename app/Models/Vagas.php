@@ -9,8 +9,9 @@ class Vagas extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'vagas_id';
+
     protected $fillable = [
-        'vagas_id',
         'companie_id',
         'nome_vaga',
         'desc_vaga',
@@ -19,8 +20,12 @@ class Vagas extends Model
         'tipo_vaga',
     ];
 
-    public function companies()
+    public function company()
     {
-        return $this->belongsTo(Companies::class);
+        return $this->belongsTo(
+            Companies::class,
+            'companie_id',     
+            'companie_id'      
+        );
     }
 }

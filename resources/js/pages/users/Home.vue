@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { usePage, Head } from '@inertiajs/vue3'
+import { usePage, Head, Link } from '@inertiajs/vue3'
 
 interface Company {
-  id: number
+  companie_id: number
   name_companie: string
 }
 
@@ -15,12 +15,12 @@ interface Vaga {
   local_vaga: string
   area_vaga: string
   tipo_vaga: string
-  companies?: Company | null
+  company?: Company | null
 }
 
 const page = usePage()
 
-const vagas = computed<Vaga[]>(() => {
+const vagas = computed(() => {
   return (page.props.vagas ?? []) as Vaga[]
 })
 
@@ -29,7 +29,7 @@ const tipo = ref('')
 
 const vagasFiltradas = computed(() => {
   return vagas.value.filter(vaga => {
-    const empresaNome = vaga.companies?.name_companie ?? ''
+    const empresaNome = vaga.company?.name_companie ?? ''
 
     const textoBusca = `${vaga.nome_vaga} ${empresaNome}`.toLowerCase()
 
@@ -51,7 +51,6 @@ const vagasFiltradas = computed(() => {
            text-[#1b1b18] dark:text-[#EDEDEC]"
   >
 
-    <!-- HERO / BUSCA -->
     <section class="mx-auto max-w-7xl px-6 pt-16 pb-12">
       <h1 class="text-3xl lg:text-4xl font-extrabold mb-4">
         Encontre sua próxima
@@ -104,16 +103,16 @@ const vagasFiltradas = computed(() => {
                  hover:shadow-xl transition
                  flex gap-4"
         >
+
           <div
             class="w-12 h-12 rounded-lg
                    bg-indigo-100 dark:bg-indigo-500/10
                    flex items-center justify-center
                    font-bold text-indigo-600 dark:text-indigo-400"
           >
-            {{ vaga.companies?.name_companie?.charAt(0) ?? '?' }}
+            {{ vaga.company?.name_companie?.charAt(0) ?? '?' }}
           </div>
 
-          <!-- CONTEÚDO -->
           <div class="flex-1">
             <h2
               class="text-lg font-semibold
@@ -125,7 +124,7 @@ const vagasFiltradas = computed(() => {
             </h2>
 
             <p class="text-sm text-gray-600 dark:text-gray-400">
-              {{ vaga.companies?.name_companie ?? 'Empresa não informada' }}
+              {{ vaga.company?.name_companie ?? 'Empresa não informada' }}
               • {{ vaga.local_vaga }}
             </p>
 
@@ -136,31 +135,30 @@ const vagasFiltradas = computed(() => {
             <span
               class="inline-block mt-3 text-xs font-medium
                      bg-indigo-100 dark:bg-indigo-500/10
-                     text-indigo-700 dark:text-indigo-400
+                     text-indigo-700 dark:text-indigo-400d
                      px-3 py-1 rounded-full"
             >
               {{ vaga.tipo_vaga }}
             </span>
           </div>
-
-          <!-- CTA -->
-          <button
-            class="self-center rounded-lg
-                   border border-indigo-600
-                   px-4 py-2 text-sm font-medium
-                   text-indigo-600
-                   hover:bg-indigo-600 hover:text-white
-                   transition
-                   dark:border-indigo-400
-                   dark:text-indigo-400
-                   dark:hover:bg-indigo-400
-                   dark:hover:text-black"
-          >
-            Ver vaga
-          </button>
+          
+      <Link
+        :href="`/user/sobreVaga/${vaga.vagas_id}`"
+        class="self-center rounded-lg
+              border border-indigo-600
+              px-4 py-2 text-sm font-medium
+              text-indigo-600
+              hover:bg-indigo-600 hover:text-white
+              transition
+              dark:border-indigo-400
+              dark:text-indigo-400
+              dark:hover:bg-indigo-400
+              dark:hover:text-black"
+      >
+        Ver vaga
+      </Link>
         </article>
 
-        <!-- EMPTY STATE -->
         <div
           v-if="!vagasFiltradas.length"
           class="text-center text-gray-500 mt-12"

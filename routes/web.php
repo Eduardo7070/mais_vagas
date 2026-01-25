@@ -19,6 +19,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/', [VagasController::class, 'index'])->name('home');
+        Route::get('/sobreVaga/{vagas_id}', [VagasController::class, 'indexSobreVaga'])->name('sobreVaga');
     });
 });
 

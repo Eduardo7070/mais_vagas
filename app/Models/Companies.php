@@ -9,9 +9,16 @@ class Companies extends Model
 {
     use HasFactory;
 
+    protected $table = 'companies';
+
+    protected $primaryKey = 'companie_id';
+
+    public $incrementing = true;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
-        'companie_id',
-        'name_companies',
+        'name_companie',
         'email',
         'password',
     ];
