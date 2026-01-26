@@ -1,5 +1,5 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
+import { Head, router } from '@inertiajs/vue3'
 
 const props = defineProps({
   vaga: {
@@ -7,6 +7,13 @@ const props = defineProps({
     required: true,
   },
 })
+
+const candidatar = () => {
+  router.post('/user/cadastrarVaga', {
+    companie_id: props.vaga.companie_id,
+    vagas_id: props.vaga.vagas_id,
+  })
+}
 </script>
 
 <template>
@@ -19,6 +26,7 @@ const props = defineProps({
            text-[#1b1b18] dark:text-[#EDEDEC]"
   >
 
+    <!-- HEADER -->
     <section class="mx-auto max-w-5xl px-6 pt-16">
       <div class="bg-white dark:bg-[#161615] rounded-2xl shadow p-8">
 
@@ -42,8 +50,10 @@ const props = defineProps({
       </div>
     </section>
 
+    <!-- CONTEÚDO -->
     <section class="mx-auto max-w-5xl px-6 mt-10 grid gap-6 lg:grid-cols-3">
 
+      <!-- DESCRIÇÃO -->
       <div class="lg:col-span-2 bg-white dark:bg-[#161615] rounded-2xl shadow p-8">
 
         <h2 class="text-xl font-bold mb-4">
@@ -56,6 +66,7 @@ const props = defineProps({
 
       </div>
 
+      <!-- CARD INFO -->
       <aside class="bg-white dark:bg-[#161615] rounded-2xl shadow p-6 space-y-6">
 
         <div>
@@ -83,7 +94,9 @@ const props = defineProps({
           </p>
         </div>
 
+        <!-- BOTÃO CANDIDATAR -->
         <button
+          @click="candidatar"
           class="w-full mt-6 rounded-xl
                  bg-indigo-600 text-white
                  px-6 py-3 font-semibold
