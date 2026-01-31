@@ -5,6 +5,9 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VagasController;
+use App\Http\Controllers\CurriculoController;
+use App\Http\Controllers\ExperienciaController;
+use App\Http\Controllers\FormacaoController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -24,4 +27,11 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-require __DIR__.'/settings.php';
+Route::get('settings/appearance', function () {
+    return Inertia::render('settings/Appearance');
+})->name('appearance.edit');
+
+Route::post('/curriculo', [CurriculoController::class, 'store']);
+
+
+require __DIR__ . '/settings.php';

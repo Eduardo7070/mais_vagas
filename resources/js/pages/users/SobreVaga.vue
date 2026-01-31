@@ -1,5 +1,6 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3'
+import { onMounted } from 'vue'
 
 const props = defineProps({
   vaga: {
@@ -8,11 +9,54 @@ const props = defineProps({
   },
 })
 
+/**
+ * Carrega o SweetAlert2 via CDN
+ */
+onMounted(() => {
+  if (!window.Swal) {
+    const script = document.createElement('script')
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11'
+    script.async = true
+    document.head.appendChild(script)
+  }
+})
+
+/**
+ * Voltar para página anterior
+ */
+const voltar = () => {
+  window.history.back()
+}
+
+/**
+ * Candidatar à vaga
+ */
 const candidatar = () => {
-  router.post('/user/cadastrarVaga', {
-    companie_id: props.vaga.companie_id,
-    vagas_id: props.vaga.vagas_id,
-  })
+  router.post(
+    '/user/cadastrarVaga',
+    {
+      companie_id: props.vaga.companie_id,
+      vagas_id: props.vaga.vagas_id,
+    },
+    {
+      onSuccess: () => {
+        window.Swal.fire({
+          icon: 'success',
+          title: 'Candidatura realizada!',
+          text: 'Você se candidatou à vaga com sucesso 🚀',
+          confirmButtonColor: '#4f46e5',
+        })
+      },
+      onError: () => {
+        window.Swal.fire({
+          icon: 'error',
+          title: 'Ops...',
+          text: 'Não foi possível se candidatar à vaga.',
+          confirmButtonColor: '#ef4444',
+        })
+      },
+    }
+  )
 }
 </script>
 
@@ -26,10 +70,36 @@ const candidatar = () => {
            text-[#1b1b18] dark:text-[#EDEDEC]"
   >
 
-    <!-- HEADER -->
+
     <section class="mx-auto max-w-5xl px-6 pt-16">
       <div class="bg-white dark:bg-[#161615] rounded-2xl shadow p-8">
 
+      <button
+      @click="voltar"
+      class="group inline-flex items-center gap-2
+            mb-6
+            rounded-full border
+            border-indigo-200 dark:border-indigo-500/30
+            bg-indigo-50 dark:bg-indigo-500/10
+            px-4 py-2
+            text-sm font-semibold
+            text-indigo-700 dark:text-indigo-300
+            transition-all duration-200
+            hover:bg-indigo-100 dark:hover:bg-indigo-500/20
+            hover:shadow-sm"
+    >
+      <span
+        class="flex h-6 w-6 items-center justify-center
+              rounded-full
+              bg-indigo-600 text-white
+              transition-transform duration-200
+              group-hover:-translate-x-1"
+      >
+        ←
+      </span>
+
+      Voltar
+    </button>
         <span
           class="inline-block mb-4 text-xs font-semibold
                  bg-indigo-100 dark:bg-indigo-500/10
@@ -50,10 +120,8 @@ const candidatar = () => {
       </div>
     </section>
 
-    <!-- CONTEÚDO -->
     <section class="mx-auto max-w-5xl px-6 mt-10 grid gap-6 lg:grid-cols-3">
 
-      <!-- DESCRIÇÃO -->
       <div class="lg:col-span-2 bg-white dark:bg-[#161615] rounded-2xl shadow p-8">
 
         <h2 class="text-xl font-bold mb-4">
@@ -66,7 +134,6 @@ const candidatar = () => {
 
       </div>
 
-      <!-- CARD INFO -->
       <aside class="bg-white dark:bg-[#161615] rounded-2xl shadow p-6 space-y-6">
 
         <div>
@@ -94,7 +161,6 @@ const candidatar = () => {
           </p>
         </div>
 
-        <!-- BOTÃO CANDIDATAR -->
         <button
           @click="candidatar"
           class="w-full mt-6 rounded-xl

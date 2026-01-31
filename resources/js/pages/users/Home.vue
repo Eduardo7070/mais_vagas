@@ -18,10 +18,19 @@ interface Vaga {
   company?: Company | null
 }
 
+interface User {
+  name: string
+  email: string
+}
+
 const page = usePage()
 
 const vagas = computed(() => {
   return (page.props.vagas ?? []) as Vaga[]
+})
+
+const user = computed(() => {
+  return page.props.auth?.user as User | null
 })
 
 const search = ref('')
@@ -30,7 +39,6 @@ const tipo = ref('')
 const vagasFiltradas = computed(() => {
   return vagas.value.filter(vaga => {
     const empresaNome = vaga.company?.name_companie ?? ''
-
     const textoBusca = `${vaga.nome_vaga} ${empresaNome}`.toLowerCase()
 
     const matchSearch = textoBusca.includes(search.value.toLowerCase())
@@ -51,6 +59,54 @@ const vagasFiltradas = computed(() => {
            text-[#1b1b18] dark:text-[#EDEDEC]"
   >
 
+    <!-- PERFIL DO USUÁRIO -->
+    <section class="mx-auto max-w-7xl px-6 pt-10">
+      <div
+        v-if="user"
+        class="bg-white dark:bg-[#161615]
+               rounded-2xl shadow
+               p-5
+               flex items-center justify-between
+               gap-4"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="w-12 h-12 rounded-full
+                   bg-indigo-600
+                   flex items-center justify-center
+                   text-white font-bold text-lg"
+          >
+            {{ user.name.charAt(0) }}
+          </div>
+
+          <div>
+            <p class="font-semibold leading-tight">
+              {{ user.name }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              {{ user.email }}
+            </p>
+          </div>
+        </div>
+
+        <Link
+          href="../settings/profile"
+          class="inline-flex items-center gap-2
+                 rounded-xl
+                 bg-indigo-600
+                 px-5 py-2.5
+                 text-sm font-semibold text-white
+                 hover:bg-indigo-700 transition
+                 dark:bg-indigo-500
+                 dark:hover:bg-indigo-400
+                 dark:text-black"
+        >
+          Meu perfil →
+        </Link>
+      </div>
+    </section>
+
+    <!-- HERO / FILTROS -->
     <section class="mx-auto max-w-7xl px-6 pt-16 pb-12">
       <h1 class="text-3xl lg:text-4xl font-extrabold mb-4">
         Encontre sua próxima
@@ -93,6 +149,7 @@ const vagasFiltradas = computed(() => {
       </div>
     </section>
 
+    <!-- LISTAGEM -->
     <section class="mx-auto max-w-7xl px-6 pb-20">
       <div class="grid gap-5">
         <article
@@ -103,7 +160,6 @@ const vagasFiltradas = computed(() => {
                  hover:shadow-xl transition
                  flex gap-4"
         >
-
           <div
             class="w-12 h-12 rounded-lg
                    bg-indigo-100 dark:bg-indigo-500/10
@@ -135,28 +191,28 @@ const vagasFiltradas = computed(() => {
             <span
               class="inline-block mt-3 text-xs font-medium
                      bg-indigo-100 dark:bg-indigo-500/10
-                     text-indigo-700 dark:text-indigo-400d
+                     text-indigo-700 dark:text-indigo-400
                      px-3 py-1 rounded-full"
             >
               {{ vaga.tipo_vaga }}
             </span>
           </div>
-          
-      <Link
-        :href="`/user/sobreVaga/${vaga.vagas_id}`"
-        class="self-center rounded-lg
-              border border-indigo-600
-              px-4 py-2 text-sm font-medium
-              text-indigo-600
-              hover:bg-indigo-600 hover:text-white
-              transition
-              dark:border-indigo-400
-              dark:text-indigo-400
-              dark:hover:bg-indigo-400
-              dark:hover:text-black"
-      >
-        Ver vaga
-      </Link>
+
+          <Link
+            :href="`/user/sobreVaga/${vaga.vagas_id}`"
+            class="self-center rounded-lg
+                   border border-indigo-600
+                   px-4 py-2 text-sm font-medium
+                   text-indigo-600
+                   hover:bg-indigo-600 hover:text-white
+                   transition
+                   dark:border-indigo-400
+                   dark:text-indigo-400
+                   dark:hover:bg-indigo-400
+                   dark:hover:text-black"
+          >
+            Ver vaga
+          </Link>
         </article>
 
         <div
